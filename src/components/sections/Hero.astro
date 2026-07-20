@@ -1,0 +1,91 @@
+---
+import BrandIcon from '../common/BrandIcon.astro';
+import CtaButton from '../common/CtaButton.astro';
+import DownloadIcon from '../common/DownloadIcon.astro';
+import { Picture } from 'astro:assets';
+import heroMockup from '../../assets/hero-mockup.png';
+import {
+  INSTALLER_URL,
+  INSTALLER_FILENAME,
+  INSTALLER_SIZE_MB,
+  VERSION,
+  RELEASES_URL,
+} from '../../lib/constants';
+---
+<section
+  id="hero"
+  aria-labelledby="hero-heading"
+  class="accent-glow relative overflow-hidden min-h-[85svh] flex items-center py-20 md:py-28"
+>
+  <div class="max-w-6xl mx-auto px-6 md:px-8 w-full">
+    <div class="flex items-center gap-4">
+      <BrandIcon class="text-md-accent" size={64} />
+      <span class="text-3xl md:text-4xl font-bold text-md-text-strong tracking-tight">MiniDeck</span>
+    </div>
+
+    <h1
+      id="hero-heading"
+      class="mt-6 max-w-xl lg:max-w-2xl text-4xl md:text-6xl font-bold leading-[1.25] text-md-text-strong"
+    >
+      スマホが <span class="text-md-accent">PC の</span><br />
+      <span class="text-md-accent">ワンタッチ・リモコンに</span>
+    </h1>
+
+    <p class="mt-6 text-base md:text-lg leading-[1.9] text-md-text max-w-2xl">
+      よく使うアプリを 6 つのボタンに登録して、スマホから 1 タップで起動。<br />
+      音量調整、Discord ミュートも、家の Wi-Fi 越しにスマホから。
+    </p>
+
+    <div class="mt-10 flex flex-col items-start gap-4">
+      <CtaButton
+        href={INSTALLER_URL}
+        download={INSTALLER_FILENAME}
+        class="px-8 py-5 text-lg min-h-[64px] min-w-[280px]"
+        aria-describedby="smartscreen-note"
+      >
+        <DownloadIcon />
+        Windows 版をダウンロード
+      </CtaButton>
+      <p class="text-sm text-md-text-muted">
+        {INSTALLER_FILENAME} · {INSTALLER_SIZE_MB} MB · Windows 10 / 11 (x64) · {VERSION}
+      </p>
+      <a
+        href={RELEASES_URL}
+        class="text-sm text-md-text-muted underline underline-offset-4 hover:text-md-accent transition-colors"
+        rel="noopener"
+      >
+        GitHub Releases で確認する
+      </a>
+    </div>
+
+    <aside
+      id="smartscreen-note"
+      class="mt-10 max-w-2xl border-l-4 border-md-accent bg-md-surface/60 px-5 py-4 rounded-r-lg"
+    >
+      <p class="text-sm md:text-base text-md-text leading-[1.9]">
+        <strong class="text-md-text-strong">ダウンロード後の注意</strong>：
+        Windows で「PC が保護されました」の画面が出たら、
+        <strong class="text-md-text-strong">「詳細情報」→「実行」</strong>の順にクリックすると進めます。
+        （現在のバージョンはコード署名なしのため）
+      </p>
+    </aside>
+  </div>
+
+  <div
+    class="hidden lg:block absolute inset-y-0 right-0 w-[42%] xl:w-[36%] pointer-events-none select-none"
+    aria-hidden="true"
+  >
+    <Picture
+      src={heroMockup}
+      alt=""
+      widths={[320, 480, 640]}
+      sizes="(min-width: 1280px) 420px, (min-width: 1024px) 32vw, 0px"
+      formats={['avif', 'webp']}
+      loading="eager"
+      decoding="async"
+      fetchpriority="low"
+      class="hero-mockup-mask absolute top-1/2 -translate-y-1/2 right-[-6%]
+             h-[100%] w-auto max-h-none opacity-50"
+    />
+  </div>
+</section>

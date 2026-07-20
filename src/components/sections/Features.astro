@@ -1,0 +1,90 @@
+---
+const features = [
+  {
+    title: 'アプリを 1 タップ起動',
+    desc: 'Chrome・VS Code・Discord・お気に入りのゲーム、どんな .exe / .lnk / .url でも登録できます。',
+    icon: 'launch',
+  },
+  {
+    title: '音量調整',
+    desc: 'PC のシステム音量スライダー、マイク／音量ミュートをスマホから。音量ミキサーでアプリごとの音量調整も可能です。',
+    icon: 'volume',
+  },
+  {
+    title: 'Discord 連携',
+    desc: 'Discord ボタンを長押しすると、マイクミュート／デフェン切替ボタンが出てきます。通話中の操作もスマホから 1 タップで。',
+    icon: 'mic',
+  },
+  {
+    title: 'ドラッグ＆ドロップ登録',
+    desc: 'アプリのアイコンを PC 画面のスロットに放り込むだけ。設定ファイルの編集は不要です。',
+    icon: 'drop',
+  },
+  {
+    title: '追加インストール不要',
+    desc: 'スマホ側は QR を読むだけ。App Store / Play ストア のアプリは入れません。',
+    icon: 'phone',
+  },
+  {
+    title: 'ローカル完結・無料',
+    desc: '通信は家の Wi-Fi 内だけ。ライセンス料も課金もありません。',
+    icon: 'shield',
+  },
+];
+
+const iconPaths: Record<string, string> = {
+  launch: 'M13 3h7v7 M20 3l-9 9 M20 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h5',
+  drop: 'M12 2v10 M8 8l4 4 4-4 M4 14v6a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6',
+  volume: 'M11 5 6 9H2v6h4l5 4V5z M15.54 8.46a5 5 0 0 1 0 7.07 M19.07 4.93a10 10 0 0 1 0 14.14',
+  mic: 'M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z M19 10v2a7 7 0 0 1-14 0v-2 M12 19v4 M8 23h8',
+  phone: 'M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z M11 18h2',
+  shield: 'M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z M9 12l2 2 4-4',
+};
+---
+<section
+  id="features"
+  aria-labelledby="features-heading"
+  class="py-20 md:py-28 bg-md-surface/40 border-t border-md-border/40"
+>
+  <div class="max-w-6xl mx-auto px-6 md:px-8">
+    <h2
+      id="features-heading"
+      class="text-3xl md:text-4xl font-bold text-md-text-strong leading-[1.4]"
+    >
+      MiniDeck の機能
+    </h2>
+    <p class="mt-4 text-md-text leading-[1.9] max-w-3xl text-pretty">
+      「よく使うものを、少ない手数で」を軸にしぼった 6 つの機能です。
+    </p>
+
+    <ul class="mt-12 grid gap-5 md:gap-6 md:grid-cols-2 lg:grid-cols-3" role="list">
+      {features.map((f) => (
+        <li
+          class="rounded-2xl bg-md-surface border border-md-border p-6 md:p-7
+                 hover:border-md-accent/50 hover:bg-md-surface-2/70 transition-colors"
+        >
+          <span
+            class="inline-flex items-center justify-center w-11 h-11 rounded-xl
+                   bg-md-accent/10 text-md-accent border border-md-accent/20"
+            aria-hidden="true"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              width="22"
+              height="22"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d={iconPaths[f.icon]} />
+            </svg>
+          </span>
+          <h3 class="mt-4 text-lg font-semibold text-md-text-strong">{f.title}</h3>
+          <p class="mt-2 text-sm md:text-base text-md-text leading-[1.9]">{f.desc}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

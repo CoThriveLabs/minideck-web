@@ -1,0 +1,99 @@
+---
+import BrandIcon from '../common/BrandIcon.astro';
+import CtaButton from '../common/CtaButton.astro';
+import DownloadIcon from '../common/DownloadIcon.astro';
+import {
+  INSTALLER_URL,
+  INSTALLER_FILENAME,
+  VERSION,
+  GITHUB_URL,
+  LICENSE_URL,
+  RELEASES_URL,
+  CONTACT_EMAIL,
+} from '../../lib/constants';
+---
+<section
+  id="download-cta"
+  aria-labelledby="download-cta-heading"
+  class="py-20 md:py-28 border-t border-md-border/40 accent-glow"
+>
+  <div class="max-w-4xl mx-auto px-6 md:px-8 text-center">
+    <BrandIcon class="text-md-accent mx-auto" size={56} />
+    <h2
+      id="download-cta-heading"
+      class="mt-6 text-3xl md:text-4xl font-bold text-md-text-strong leading-[1.4]"
+    >
+      快適な PC ライフを<br class="md:hidden" />始めましょう
+    </h2>
+    <p class="mt-4 text-md-text leading-[1.9]">
+      Windows 10 / 11 (x64) 用インストーラ · バージョン {VERSION}
+    </p>
+
+    <div class="mt-8 flex flex-col items-center gap-3">
+      <CtaButton
+        href={INSTALLER_URL}
+        download={INSTALLER_FILENAME}
+        class="px-8 py-5 text-lg min-h-[64px] min-w-[280px]"
+      >
+        <DownloadIcon />
+        Windows 版をダウンロード
+      </CtaButton>
+      <p class="text-sm text-md-text-muted">{INSTALLER_FILENAME}</p>
+    </div>
+  </div>
+</section>
+
+<footer class="border-t border-md-border/40 py-10 md:py-12">
+  <div class="max-w-6xl mx-auto px-6 md:px-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+    <div class="flex items-center gap-3">
+      <BrandIcon class="text-md-accent" size={28} />
+      <div>
+        <p class="text-md-text-strong font-semibold">MiniDeck</p>
+        <p class="text-xs text-md-text-muted">© 2026 Co-Thrive Labs</p>
+      </div>
+    </div>
+
+    <nav aria-label="Footer">
+      <ul
+        class="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-md-text-muted"
+        role="list"
+      >
+        <li>
+          <a
+            href={GITHUB_URL}
+            class="hover:text-md-accent transition-colors"
+            rel="noopener"
+          >
+            GitHub
+          </a>
+        </li>
+        <li>
+          <a
+            href={RELEASES_URL}
+            class="hover:text-md-accent transition-colors"
+            rel="noopener"
+          >
+            Releases
+          </a>
+        </li>
+        <li>
+          <a
+            href={LICENSE_URL}
+            class="hover:text-md-accent transition-colors"
+            rel="noopener"
+          >
+            License
+          </a>
+        </li>
+        <li>
+          <a
+            href={`mailto:${CONTACT_EMAIL}`}
+            class="hover:text-md-accent transition-colors"
+          >
+            {CONTACT_EMAIL}
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</footer>

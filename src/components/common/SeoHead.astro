@@ -1,0 +1,61 @@
+---
+import {
+  organizationJsonLd,
+  websiteJsonLd,
+  softwareApplicationJsonLd,
+  faqPageJsonLd,
+  type FaqItem,
+} from '../../lib/jsonld';
+
+export interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  ogImage?: string;
+  /** FAQPage JSON-LD を追加する場合のみ渡す（トップページのみ）。 */
+  faqs?: FaqItem[];
+}
+
+const {
+  title,
+  description,
+  canonical,
+  ogImage = '/og-image.png',
+  faqs,
+} = Astro.props;
+
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? '';
+const canonicalUrl = canonical ?? `${siteUrl}${Astro.url.pathname}`;
+const ogImageUrl = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}`;
+
+const jsonldBlocks = [
+  organizationJsonLd(siteUrl),
+  websiteJsonLd(siteUrl),
+  softwareApplicationJsonLd(siteUrl),
+  ...(faqs && faqs.length > 0 ? [faqPageJsonLd(faqs)] : []),
+];
+---
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalUrl} />
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="MiniDeck" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:image" content={ogImageUrl} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:locale" content="ja_JP" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImageUrl} />
+
+<meta name="theme-color" content="#0A0A12" />
+
+{jsonldBlocks.map((block) => (
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(block).replace(/</g, '\\u003c')} />
+))}

@@ -1,0 +1,50 @@
+---
+import '../styles/globals.css';
+import SeoHead from '../components/common/SeoHead.astro';
+import type { FaqItem } from '../lib/jsonld';
+
+export interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  ogImage?: string;
+  faqs?: FaqItem[];
+}
+
+const { title, description, canonical, ogImage, faqs } = Astro.props;
+---
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      onload={"this.onload=null;this.rel='stylesheet'"}
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      />
+    </noscript>
+
+    <SeoHead
+      title={title}
+      description={description}
+      canonical={canonical}
+      ogImage={ogImage}
+      faqs={faqs}
+    />
+  </head>
+  <body class="bg-md-bg text-md-text antialiased">
+    <slot />
+  </body>
+</html>

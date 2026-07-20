@@ -1,0 +1,20 @@
+---
+// 主要 CTA ボタン共通シェル。サイズ関連クラス（px / py / text-size / min-h 等）は
+// 呼び出し側の class prop で指定する（Hero / Footer / 404 でサイズが異なるため）。
+export interface Props {
+  href: string;
+  download?: string;
+  class?: string;
+}
+
+const { href, download, class: className = '', ...rest } = Astro.props;
+---
+<a
+  href={href}
+  download={download}
+  class={`cta-primary inline-flex items-center justify-center gap-3 rounded-2xl font-semibold text-white
+         focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-md-accent/50 ${className}`}
+  {...rest}
+>
+  <slot />
+</a>

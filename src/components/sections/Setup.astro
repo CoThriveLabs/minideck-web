@@ -1,0 +1,97 @@
+---
+import { INSTALLER_FILENAME } from '../../lib/constants';
+import { formatInlineCode } from '../../lib/format-inline-code';
+
+// セットアップスクショは作らず、テキスト + アイコンのみで手順を伝える。
+// PC・スマホ・ボタンの 3 アイコンで各ステップを視覚化。
+
+const steps = [
+  {
+    n: '1',
+    title: 'PC でインストール',
+    body:
+      `ダウンロードした \`${INSTALLER_FILENAME}\` をダブルクリック。SmartScreen が出たら「詳細情報 → 実行」で通します。初回起動時に管理者権限確認（UAC）が出るので「はい」を選択してください。`,
+    icon: 'monitor',
+  },
+  {
+    n: '2',
+    title: 'スマホで QR を読み取る',
+    body:
+      'MiniDeck を起動し、左下の「デバイス未接続」ボタンを押すと PC 画面に QR コードが出ます。スマホのカメラで読み取り、開いたページを「ホーム画面に追加」してください。※ PC とスマホは同じ Wi-Fi につないでおくこと。',
+    icon: 'phone',
+  },
+  {
+    n: '3',
+    title: 'ボタンにアプリを登録',
+    body:
+      'PC 画面の 6 スロットに、起動したいアプリ（.exe / .lnk / .url）をドラッグ＆ドロップ。ラベルと色をお好みで設定すれば、あとはスマホから 1 タップで起動できます。',
+    icon: 'grid',
+  },
+];
+
+const iconPaths: Record<string, string> = {
+  monitor: 'M3 4h18v12H3z M8 20h8 M12 16v4',
+  phone: 'M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z M11 18h2',
+  grid: 'M4 4h6v6H4z M14 4h6v6h-6z M4 14h6v6H4z M14 14h6v6h-6z',
+};
+---
+<section
+  id="setup"
+  aria-labelledby="setup-heading"
+  class="py-20 md:py-28 border-t border-md-border/40"
+>
+  <div class="max-w-6xl mx-auto px-6 md:px-8">
+    <h2
+      id="setup-heading"
+      class="text-3xl md:text-4xl font-bold text-md-text-strong leading-[1.4]"
+    >
+      使い始めるまで、<span class="text-md-accent">3 ステップ</span>
+    </h2>
+    <p class="mt-4 text-md-text leading-[1.9] max-w-2xl">
+      特別なアプリのインストールやアカウント作成はいりません。3 分あれば準備できます。
+    </p>
+
+    <ol class="mt-12 grid gap-6 md:gap-8 md:grid-cols-3" role="list">
+      {steps.map((s) => (
+        <li
+          class="relative rounded-2xl bg-md-surface border border-md-border p-6 md:p-8
+                 hover:border-md-accent/50 transition-colors"
+        >
+          <div class="flex items-center gap-4">
+            <span
+              class="text-4xl md:text-5xl font-bold text-md-accent leading-none tabular-nums"
+              aria-hidden="true"
+            >
+              {s.n}
+            </span>
+            <span
+              class="inline-flex items-center justify-center w-12 h-12 rounded-xl
+                     bg-md-accent/10 text-md-accent border border-md-accent/20"
+              aria-hidden="true"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="24"
+                height="24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d={iconPaths[s.icon]} />
+              </svg>
+            </span>
+          </div>
+          <h3 class="mt-5 text-lg md:text-xl font-semibold text-md-text-strong">
+            {s.title}
+          </h3>
+          <p
+            class="mt-3 text-sm md:text-base text-md-text leading-[1.95]"
+            set:html={formatInlineCode(s.body)}
+          />
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>

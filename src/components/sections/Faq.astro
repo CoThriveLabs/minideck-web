@@ -1,0 +1,99 @@
+---
+import type { FaqItem } from '../../lib/jsonld';
+import { formatInlineCode } from '../../lib/format-inline-code';
+
+export const faqs: FaqItem[] = [
+  {
+    q: 'Mac や Linux でも使えますか？',
+    a: '現時点では Windows 10 / 11 のみ対応です。Mac 版・Linux 版は将来バージョンで対応を検討しています。',
+  },
+  {
+    q: '「Windows によって PC が保護されました」が出ました',
+    a: 'コード署名を行っていない配布なので出ます。「詳細情報 → 実行」で進めれば安全にインストールできます。GitHub Releases に載っている SHA512 と一致していれば、ファイルの改ざんはありません。',
+  },
+  {
+    q: 'インストール時に管理者権限（UAC）が出ました',
+    a: 'Windows ファイアウォールの通信許可ルールを自動で追加するために必要です。「はい」を選択してください。一度許可すれば以降は表示されません。',
+  },
+  {
+    q: 'スマホから PC が見つかりません',
+    a: 'PC とスマホが同じ Wi-Fi に接続されているか確認してください。ルーターの「クライアント分離」機能が有効だと通信が遮断されます。ルーターの管理画面から無効化してください。',
+  },
+  {
+    q: 'Android で使えないバージョンはありますか？',
+    a: 'Android 11 以前は `.local` の名前解決に対応していないため使えません。Android 12 以降でご利用ください。',
+  },
+  {
+    q: 'iPad で接続がすぐ切れます',
+    a: 'iPadOS 26 の既知の問題です。Wi-Fi 設定の「プロキシ」を「自動」に設定し URL 欄を空白にすると回避できます。iPhone では発生しません。',
+  },
+  {
+    q: '公衆 Wi-Fi（カフェ・空港）で使えますか？',
+    a: '使用しないでください。MiniDeck は同じ Wi-Fi にいる端末同士が直接通信する設計です。ペアリング認証はありますが、想定利用は家庭内 LAN です。',
+  },
+  {
+    q: 'ボタンを押しても PC 側で何も起きません',
+    a: '登録したアプリのファイルパスが変わっていないか、PC 画面右下の接続インジケータが緑色になっているかを確認してください。PC 側 MiniDeck を再起動すると多くの問題が解消します。',
+  },
+  {
+    q: 'Discord のミュート／デフ切替が効きません',
+    a: 'Discord のキーバインド設定でショートカットを変更している場合は動作しません。Discord 側でデフォルト設定に戻すか、MiniDeck の Discord 機能を未使用にしてください。',
+  },
+  {
+    q: 'インターネットに勝手に繋がりますか？（データを外部に送りますか）',
+    a: '通信は家の Wi-Fi 内に閉じています。外部への通信は新バージョンの有無を確認するときのみで、テレメトリや使用状況の収集は行いません。',
+  },
+];
+---
+<section
+  id="faq"
+  aria-labelledby="faq-heading"
+  class="py-20 md:py-28 border-t border-md-border/40"
+>
+  <div class="max-w-4xl mx-auto px-6 md:px-8">
+    <h2
+      id="faq-heading"
+      class="text-3xl md:text-4xl font-bold text-md-text-strong leading-[1.4]"
+    >
+      よくある質問
+    </h2>
+
+    <div class="mt-10 space-y-3">
+      {faqs.map((f, idx) => (
+        <details
+          class="faq-item group rounded-xl border border-md-border bg-md-surface open:bg-md-surface-2/70 transition-colors"
+        >
+          <summary
+            class="cursor-pointer list-none flex items-start justify-between gap-4 p-5 md:p-6
+                   text-md-text-strong font-semibold
+                   focus-visible:outline-2 focus-visible:outline-md-accent focus-visible:outline-offset-2 rounded-xl"
+          >
+            <span class="flex items-start gap-3 flex-1 min-w-0">
+              <span class="text-md-accent tabular-nums flex-shrink-0">Q{idx + 1}.</span>
+              <span class="flex-1 min-w-0 leading-[1.6]">{f.q}</span>
+            </span>
+            <span class="faq-marker shrink-0 mt-1 text-md-accent" aria-hidden="true">
+              <svg
+                viewBox="0 0 24 24"
+                width="20"
+                height="20"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+            </span>
+          </summary>
+          <div class="px-5 md:px-6 pb-6 pt-1 text-md-text leading-[1.95]">
+            <p
+              class="pl-0 md:pl-8"
+              set:html={formatInlineCode(Array.isArray(f.a) ? f.a.join('\n\n') : f.a)}
+            />
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,28 @@
+---
+// MiniDeck ブランドロゴ。PC モニタ + スマートフォンの線画モチーフ。
+// 座標は本体アプリの packages/electron/renderer/src/features/shell/Sidebar.tsx L88-92 と同一。
+// 変更する場合は本体 SVG・public/favicon.svg・scripts/lib/brand-icon-raster.mjs も揃えて更新すること。
+interface Props {
+  class?: string;
+  size?: number;
+}
+const { class: className = '', size = 24 } = Astro.props;
+---
+<svg
+  viewBox="0 0 24 24"
+  width={size}
+  height={size}
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class={`shrink-0 ${className}`}
+  aria-hidden="true"
+>
+  <rect x="1.5" y="4" width="14" height="10" rx="1.5" />
+  <path d="M5.5 17h6" />
+  <path d="M8.5 14v3" />
+  <rect x="13.5" y="9" width="9" height="14" rx="2" />
+  <path d="M17 20h2" />
+</svg>
