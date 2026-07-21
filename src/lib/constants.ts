@@ -1,7 +1,7 @@
 // MiniDeck LP 全体で参照するリリース定数。バージョン更新時はこの 1 ファイルを書き換える。
 
-export const VERSION = 'v0.1.0';
-export const INSTALLER_FILENAME = 'MiniDeck-Setup-0.1.0.exe';
+export const VERSION = 'v0.1.1';
+export const INSTALLER_FILENAME = 'MiniDeck-Setup-0.1.1.exe';
 export const INSTALLER_URL =
   `https://github.com/CoThriveLabs/minideck/releases/download/${VERSION}/${INSTALLER_FILENAME}`;
 export const INSTALLER_SIZE_MB = 96.9;
