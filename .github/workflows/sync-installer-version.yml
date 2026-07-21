@@ -1,0 +1,126 @@
+name: Sync Installer Version
+on:
+  repository_dispatch:
+    types: [minideck-release]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release tag, e.g. v0.1.2'
+        required: true
+        type: string
+      filename:
+        description: 'Installer asset filename, e.g. MiniDeck-Setup-0.1.2.exe'
+        required: true
+        type: string
+      size_mb:
+        description: 'Installer size in MB, e.g. 97.5'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-installer-version
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      # repository_dispatch and workflow_dispatch carry the same three
+      # values under different context paths; normalize them to one set of
+      # outputs so later steps don't need to branch on event name.
+      - name: Resolve version inputs
+        id: vars
+        env:
+          DISPATCH_VERSION: ${{ github.event.client_payload.version }}
+          DISPATCH_FILENAME: ${{ github.event.client_payload.filename }}
+          DISPATCH_SIZE_MB: ${{ github.event.client_payload.size_mb }}
+          INPUT_VERSION: ${{ github.event.inputs.version }}
+          INPUT_FILENAME: ${{ github.event.inputs.filename }}
+          INPUT_SIZE_MB: ${{ github.event.inputs.size_mb }}
+        run: |
+          if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
+            VERSION="$DISPATCH_VERSION"
+            FILENAME="$DISPATCH_FILENAME"
+            SIZE_MB="$DISPATCH_SIZE_MB"
+          else
+            VERSION="$INPUT_VERSION"
+            FILENAME="$INPUT_FILENAME"
+            SIZE_MB="$INPUT_SIZE_MB"
+          fi
+          {
+            echo "version=$VERSION"
+            echo "filename=$FILENAME"
+            echo "size_mb=$SIZE_MB"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Update installer version constants
+        uses: actions/github-script@v7
+        env:
+          VERSION: ${{ steps.vars.outputs.version }}
+          FILENAME: ${{ steps.vars.outputs.filename }}
+          SIZE_MB: ${{ steps.vars.outputs.size_mb }}
+        with:
+          script: |
+            const fs = require('fs');
+
+            const version = process.env.VERSION;
+            const filename = process.env.FILENAME;
+            const sizeMb = process.env.SIZE_MB;
+
+            if (!version || !filename || !sizeMb) {
+              core.setFailed('Missing version, filename, or size_mb input.');
+              return;
+            }
+
+            if (!/^v\d+\.\d+\.\d+$/.test(version)) {
+              core.setFailed(`Invalid version format: ${version}`);
+              return;
+            }
+
+            if (filename.includes("'")) {
+              core.setFailed(`Invalid filename (contains single quote): ${filename}`);
+              return;
+            }
+
+            const path = 'src/lib/constants.ts';
+            let content = fs.readFileSync(path, 'utf8');
+
+            // Only these three lines are touched; everything else in the
+            // file (URLs, contact info, site copy) derives from VERSION or
+            // is unrelated and must stay untouched.
+            content = content.replace(
+              /export const VERSION = '.*?';/,
+              `export const VERSION = '${version}';`
+            );
+            content = content.replace(
+              /export const INSTALLER_FILENAME = '.*?';/,
+              `export const INSTALLER_FILENAME = '${filename}';`
+            );
+            content = content.replace(
+              /export const INSTALLER_SIZE_MB = [^;]+;/,
+              `export const INSTALLER_SIZE_MB = ${sizeMb};`
+            );
+
+            fs.writeFileSync(path, content);
+
+      - name: Commit and push if changed
+        env:
+          VERSION: ${{ steps.vars.outputs.version }}
+        run: |
+          if git diff --quiet -- src/lib/constants.ts; then
+            echo "No changes to constants.ts; skipping commit."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/lib/constants.ts
+          git commit -m "chore: bump installer to ${VERSION}"
+          git push origin main
