@@ -19,6 +19,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: sync-installer-version
@@ -111,11 +112,13 @@ jobs:
             fs.writeFileSync(path, content);
 
       - name: Commit and push if changed
+        id: commit
         env:
           VERSION: ${{ steps.vars.outputs.version }}
         run: |
           if git diff --quiet -- src/lib/constants.ts; then
             echo "No changes to constants.ts; skipping commit."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
@@ -124,3 +127,10 @@ jobs:
           git add src/lib/constants.ts
           git commit -m "chore: bump installer to ${VERSION}"
           git push origin main
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Trigger LP deploy
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run deploy.yml --repo CoThriveLabs/minideck-web --ref main
