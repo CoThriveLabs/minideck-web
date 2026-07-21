@@ -4,7 +4,7 @@ export const VERSION = 'v0.1.1';
 export const INSTALLER_FILENAME = 'MiniDeck-Setup-0.1.1.exe';
 export const INSTALLER_URL =
   `https://github.com/CoThriveLabs/minideck/releases/download/${VERSION}/${INSTALLER_FILENAME}`;
-export const INSTALLER_SIZE_MB = 79.6;
+export const INSTALLER_SIZE_MB = 79.5;
 
 export const GITHUB_URL = 'https://github.com/CoThriveLabs/minideck';
 export const RELEASES_URL = `${GITHUB_URL}/releases/tag/${VERSION}`;
